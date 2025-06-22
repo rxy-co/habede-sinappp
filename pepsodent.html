@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Senyum Pepsodent</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #111 0%, #000 100%);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      position: relative;
+      color: #fff;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: sparkleAnim 3s linear infinite;
+    }
+
+    @keyframes sparkleAnim {
+      0% {opacity: 0; transform: scale(0.5);}
+      50% {opacity: 1; transform: scale(1.2);}
+      100% {opacity: 0; transform: scale(0.5);}
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      position: relative;
+    }
+
+    .image-box {
+      width: 30%;
+      height: auto;
+      opacity: 0;
+      transition: all 1.2s ease;
+      z-index: 2;
+    }
+
+    .image-box img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    }
+
+    .symbol {
+      font-size: 3rem;
+      opacity: 0;
+      transition: all 1s ease;
+      margin: 0 20px;
+    }
+
+    .foto-kini {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      opacity: 0;
+      transition: all 1.5s ease;
+      z-index: 3;
+      max-width: 90vw;
+      max-height: 70vh;
+    }
+
+    .foto-kini img {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 30px #fff, 0 0 50px #fffc, 0 0 70px #fff9;
+    }
+
+    .caption {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 500px;
+      background: rgba(0,0,0,0.6);
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      color: #ffd;
+      text-shadow: 0 0 8px #000;
+      opacity: 0;
+      transition: opacity 1s ease;
+      text-align: center;
+      z-index: 4;
+    }
+
+    #nextBtn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      font-size: 1rem;
+      background: #ffd700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #fff8b5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="image-box" id="fotoKecil"><img src="image/snz.png" alt="Foto Kecil"></div>
+  <div class="symbol" id="symbolPlus">+</div>
+  <div class="image-box" id="pepsodentImg"><img src="image/pepsodent.png" alt="Pepsodent"></div>
+</div>
+
+<div class="foto-kini" id="fotoKini">
+  <img src="image/snz18.png" alt="Foto Kini">
+</div>
+
+<div class="caption" id="captionText">
+  "SINAP", P nya Pepsodent hahahahhaha😁✨<br><strong>#SenyumPepsodent✅</strong><br>
+  <button id="nextBtn" onclick="location.href='name.html'">Next ➜</button>
+</div>
+
+<script>
+  // Bintang-bintang kelap kelip
+  for (let i = 0; i < 80; i++) {
+    const star = document.createElement('div');
+    star.className = 'sparkle';
+    star.style.left = Math.random() * 100 + 'vw';
+    star.style.top = Math.random() * 100 + 'vh';
+    star.style.animationDelay = (Math.random() * 3) + 's';
+    star.style.opacity = Math.random();
+    document.body.appendChild(star);
+  }
+
+  // Urutan animasi
+  const fotoKecil = document.getElementById('fotoKecil');
+  const pepsodent = document.getElementById('pepsodentImg');
+  const symbol = document.getElementById('symbolPlus');
+  const fotoKini = document.getElementById('fotoKini');
+  const caption = document.getElementById('captionText');
+  const nextBtn = document.getElementById('nextBtn');
+
+  setTimeout(() => {
+    fotoKecil.style.opacity = 1;
+  }, 800);
+
+  setTimeout(() => {
+    symbol.style.opacity = 1;
+  }, 1800);
+
+  setTimeout(() => {
+    pepsodent.style.opacity = 1;
+  }, 2500);
+
+  setTimeout(() => {
+    fotoKecil.style.opacity = 0;
+    pepsodent.style.opacity = 0;
+    symbol.style.opacity = 0;
+    fotoKini.style.opacity = 1;
+    fotoKini.style.transform = 'translate(-50%, -50%) scale(1)';
+  }, 4000);
+
+  setTimeout(() => {
+    caption.style.opacity = 1;
+    nextBtn.style.display = 'inline-block';
+  }, 5300);
+</script>
+
+</body>
+</html>

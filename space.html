@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>22 Juni 2007</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .earth-static-wrapper {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .earth-static {
+      width: 100%;
+      opacity: 0.7;
+      object-fit: cover;
+      filter: brightness(120%) contrast(110%);
+    }
+
+    body {
+      background: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    canvas#starCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5vw;
+    }
+
+    .text-box {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      animation: fadeIn 2s ease-out forwards;
+      max-width: 800px;
+      backdrop-filter: blur(5px);
+    }
+
+    .text-box p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .sts-ship {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 150px;
+      opacity: 0.4;
+      z-index: 1;
+      transition: transform 0.2s ease-out;
+    }
+
+    @media (max-width: 600px) {
+      .text-box p {
+        font-size: 1rem;
+      }
+
+      .sts-ship {
+        width: 100px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="earth-static-wrapper">
+  <img src="image/earth.png" class="earth-static" alt="Permukaan Bumi">
+</div>
+
+<canvas id="starCanvas"></canvas>
+
+<div class="content">
+  <div class="text-box">
+      <h2>Fun Fact💡</h2>
+      <br>
+    <p>
+      Pada <strong>22 Juni 2007</strong>, pesawat luar angkasa <em>STS-117 Atlantis</em>  
+      mendarat kembali ke Bumi setelah perjalanan panjang menembus ruang dan waktu. <br><br>
+      Tapi hari itu, bukan cuma langit yang mencatat momen penting.  
+      Karena entah kebetulan atau takdir, dunia juga menyambut hadirnya seseorang...  
+      yang kini, mungkin tanpa disadari, membawa hangat seperti bintang.  
+      <br><br>
+      Karena kadang, cerita paling sederhana bisa berawal dari langit yang tenang.
+    </p>
+
+    <div style="margin-top: 2em;">
+      <a href="star.html" style="
+        display: inline-block;
+        padding: 12px 24px;
+        background: #ff4da6;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(255, 77, 166, 0.4);
+        transition: background 0.3s ease;
+      " onmouseover="this.style.background='#ff007f'" onmouseout="this.style.background='#ff4da6'">
+        Next
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Gambar pesawat -->
+<img src="image/sts117.png" class="sts-ship" id="parallaxShip" alt="Futuristic Spacecraft">
+
+<script>
+  const canvas = document.getElementById('starCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let stars = [];
+  let shootingStars = [];
+
+  function Star() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.radius = Math.random() * 1.2;
+    this.speed = Math.random() * 0.3 + 0.2;
+
+    this.draw = function() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    };
+
+    this.update = function() {
+      this.y += this.speed;
+      if (this.y > canvas.height) {
+        this.y = 0;
+        this.x = Math.random() * canvas.width;
+      }
+      this.draw();
+    };
+  }
+
+  function ShootingStar() {
+    this.reset = function() {
+      this.x = Math.random() * canvas.width;
+      this.y = 0;
+      this.length = Math.random() * 80 + 50;
+      this.speed = Math.random() * 8 + 5;
+      this.angle = Math.PI / 4;
+      this.alpha = 1;
+    };
+    this.reset();
+
+    this.draw = function() {
+      ctx.strokeStyle = `rgba(255,255,255,${this.alpha})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(
+        this.x - this.length * Math.cos(this.angle),
+        this.y - this.length * Math.sin(this.angle)
+      );
+      ctx.stroke();
+    };
+
+    this.update = function() {
+      this.x += this.speed;
+      this.y += this.speed;
+      this.alpha -= 0.01;
+      if (this.alpha <= 0) {
+        this.reset();
+      }
+      this.draw();
+    };
+  }
+
+  for (let i = 0; i < 150; i++) {
+    stars.push(new Star());
+  }
+
+  for (let i = 0; i < 2; i++) {
+    shootingStars.push(new ShootingStar());
+  }
+
+  function animateStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(star => star.update());
+    shootingStars.forEach(star => star.update());
+    requestAnimationFrame(animateStars);
+  }
+
+  animateStars();
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  window.addEventListener('mousemove', function(e) {
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+    document.getElementById('parallaxShip').style.transform = `translate(${x}px, ${y}px)`;
+  });
+</script>
+</body>
+</html>

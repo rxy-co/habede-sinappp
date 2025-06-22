@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makna Namamu</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #1e1e2f, #121212);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;}
+
+    .search-container {
+      text-align: center;
+      position: relative;
+    }
+
+    .search-bar {
+      font-size: 1.2rem;
+      padding: 10px 40px 10px 15px;
+      width: 80vw;
+      max-width: 400px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 8px;
+      font-size: 1.5rem;
+      color: #999;
+    }
+
+    .enter-button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #ffd700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #fff8b5;
+    }
+
+    .name-parts {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 90%;
+      max-width: 800px;
+      position: relative;
+    }
+
+    .name-box {
+      background: #ffffff10;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      opacity: 0;
+      transform: translateX(-100%);
+      animation: slideIn 1s forwards;
+    }
+
+    .name-box:nth-child(1) { animation-delay: 0.3s; }
+    .name-box:nth-child(2) { animation-delay: 0.6s; }
+    .name-box:nth-child(3) { animation-delay: 0.9s; }
+
+    @keyframes slideIn {
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .name-box .text {
+      flex: 1;
+      font-size: 1.1rem;
+    }
+
+    .name-box .image-slot {
+      width: 80px;
+      height: 80px;
+      background: #333;
+      border-radius: 10px;
+      margin-left: 15px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .name-box .image-slot img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    #nextBtn {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #ffd700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #fff8b5;
+      display: none;
+    }
+
+    .sakura {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: url('https://pngimg.com/uploads/sakura/sakura_PNG8.png') no-repeat center;
+      background-size: contain;
+      top: -20px;
+      animation: fall 6s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+    }
+      .container-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      transition: all 0.5s ease;
+    }
+
+    .container-wrapper.move-up {
+      justify-content: flex-start;
+      padding-top: 50px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container-wrapper" id="wrapper">
+
+  <div class="search-container">
+  <input type="text" class="search-bar" id="searchText" readonly value="">
+  <span class="search-icon">🔍</span>
+  <br>
+  <button class="enter-button" onclick="showNameParts()">Enter</button>
+</div>
+
+  </div> <!-- search-container -->
+</div> <!-- container-wrapper -->
+
+<div class="name-parts" id="nameParts" style="display: none;">
+  <div class="name-box">
+    <div class="text"><strong>🕊️ Siti</strong> – Seperti merpati yang anggun, namanya membawa kesan kelembutan dan kemuliaan. Ia hadir sebagai sosok wanita yang penuh kasih, dihormati, dan memberi kedamaian di mana pun ia berada.</div>
+    <div class="image-slot"><img src="image/ummi.png" alt=""></div>
+  </div>
+  <div class="name-box">
+    <div class="text"><strong>💎 Nafisyah</strong> – Layaknya permata langka yang tersembunyi di dasar samudra, Nafisyah adalah sosok berharga, penuh pesona dalam kesederhanaannya. Ia bersinar tanpa harus menyilaukan, membawa kehangatan dan nilai yang tak tergantikan.</div>
+    <div class="image-slot"><img src="image/berlian.png" alt=""></div>
+  </div>
+  <div class="name-box">
+    <div class="text"><strong>🌸 Azzahra</strong> – Sebuah nama yang mekar seperti bunga saat pagi menjelang. Azzahra adalah wujud dari kecerdasan, keanggunan, dan keindahan batin yang memikat hati siapa pun yang mengenalnya.</div>
+    <div class="image-slot"><img src="image/glowflow.jpg" alt=""></div>
+  </div>
+
+  <div class="name-box" style="animation-delay: 1.2s;">
+    <div class="text"><strong><center>Satu nama yang terdiri dari kelembutan seekor merpati, kemilau permata yang tak ternilai, dan bunga yang mekar penuh cahaya. Sebuah harmoni dari ketulusan hati, nilai sejati, dan pesona alami.</center></div>
+  </div>
+
+  <button id="nextBtn" onclick="location.href='mimpi.html'">Next ➜</button>
+
+<script>
+  const text = "apa arti nama 'Siti Nafisyah Azzahra'?";
+  const searchText = document.getElementById("searchText");
+  let index = 0;
+
+  function typeText() {
+    if (index < text.length) {
+      searchText.value += text.charAt(index);
+      index++;
+      setTimeout(typeText, 100);
+    }
+  }
+
+  function showNameParts() {
+    document.getElementById("wrapper").classList.add("move-up");
+    const parts = document.getElementById("nameParts");
+    parts.style.display = "flex";
+    document.getElementById("nextBtn").style.display = "inline-block";
+
+    for (let i = 0; i < 20; i++) {
+      const petal = document.createElement('div');
+      petal.classList.add('sakura');
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDelay = Math.random() * 5 + 's';
+      petal.style.animationDuration = 4 + Math.random() * 4 + 's';
+      document.body.appendChild(petal);
+    }
+  }
+  
+
+  window.onload = typeText;
+</script>
+
+</body>
+</html>

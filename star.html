@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bintang Paling Terang</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      background: black;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: auto;
+      touch-action: auto;
+    }
+
+    .hint-text {
+      position: absolute;
+      top: 40%;
+      left: 62%;
+      transform: translate(-50%, -50%);
+      color: #ffffcc;
+      font-size: 0.85rem;
+      text-shadow: 0 0 5px #000;
+      z-index: 3;
+      animation: fadeInHint 2s ease-in-out;
+    }
+
+    @keyframes fadeInHint {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .photo-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+      transition: all 1.2s ease;
+      z-index: 2;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .photo-wrapper.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+
+    .photo-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .glow-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,200,0.5), transparent 60%);
+      z-index: 0;
+      animation: glow 4s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+      }
+    }
+
+    .photo-wrapper img {
+      width: 250px;
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.7);
+      position: relative;
+      z-index: 1;
+    }
+
+    .photo-wrapper p {
+      margin-top: 1rem;
+      color: #ffe;
+      font-size: 1.2rem;
+      text-shadow: 0 0 8px #000;
+      z-index: 2;
+    }
+
+    .falling-star {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      background: white;
+      box-shadow: 0 0 10px white;
+      border-radius: 50%;
+      opacity: 0.9;
+      z-index: 1;
+      animation: fallStarReal 2s ease-out forwards;
+    }
+
+    @keyframes fallStarReal {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-150px, 700px) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    #nextButton {
+      margin-top: 1.2rem;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ffd700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #fff5b5;
+      display: none;
+      transition: transform 0.2s;
+      z-index: 4;
+    }
+
+    #nextButton:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="starCanvas"></canvas>
+
+<div class="hint-text" id="hintText">
+  Wah, ada bintang yang beda tuhh... coba klik!
+</div>
+
+<div class="photo-wrapper" id="photoWrapper">
+  <div class="photo-container">
+    <div class="glow-circle"></div>
+    <img src="image/snz.png" alt="Foto Balita">
+  </div>
+  <p>waduu gumushhyaaa... ternyata udah bersinar sejak dulu ✨</p>
+  <button id="nextButton" onclick="location.href='pepsodent.html'">Next ➜</button>
+</div>
+
+<script>
+  const canvas = document.getElementById("starCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const stars = [];
+  const numStars = 200;
+  for (let i = 0; i < numStars; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.5,
+      speed: Math.random() * 0.3 + 0.1
+    });
+  }
+
+  const specialStar = {
+    x: canvas.width * 0.7,
+    y: canvas.height * 0.35,
+    r: 6,
+    pulse: 0
+  };
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(star => {
+      star.x -= star.speed;
+      if (star.x < 0) star.x = canvas.width;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+    });
+
+    specialStar.pulse += 0.05;
+    const pulsingRadius = specialStar.r + Math.sin(specialStar.pulse) * 1.8;
+    ctx.beginPath();
+    ctx.arc(specialStar.x, specialStar.y, pulsingRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffff99";
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "#ffffcc";
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  function animate() {
+    drawStars();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  function handleStarClick(x, y) {
+    const dx = x - specialStar.x;
+    const dy = y - specialStar.y;
+    if (Math.sqrt(dx * dx + dy * dy) < specialStar.r + 12) {
+      document.getElementById('photoWrapper').classList.add('show');
+      document.getElementById('hintText').style.display = 'none';
+      document.getElementById('nextButton').style.display = 'inline-block';
+      startFallingStars();
+    }
+  }
+
+  canvas.addEventListener('click', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    handleStarClick(x, y);
+  });
+
+  canvas.addEventListener('touchstart', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const y = e.touches[0].clientY - rect.top;
+    handleStarClick(x, y);
+  });
+
+  function createFallingStar() {
+    const star = document.createElement('div');
+    star.className = 'falling-star';
+    star.style.top = Math.random() * 100 + 'px';
+    star.style.left = Math.random() * window.innerWidth + 'px';
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 2000);
+  }
+
+  function startFallingStars() {
+    setInterval(() => {
+      createFallingStar();
+    }, 1800);
+  }
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    specialStar.x = canvas.width * 0.7;
+    specialStar.y = canvas.height * 0.35;
+  });
+</script>
+
+</body>
+</html>

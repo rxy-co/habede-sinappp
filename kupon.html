@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scratch Card Romantis 🎁</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #ffccd5, #ffe9f0);
+      font-family: 'Caveat', cursive;
+      overflow-x: hidden;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5vh 2vw;
+      gap: 3vh;
+    }
+
+    .title-box, .message-box {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      padding: 1.5em 2.5em;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 90vw;
+    }
+
+    .title-box h1 {
+      margin: 0;
+      font-size: 3.2vw;
+      color: #b4004e;
+    }
+
+    .message-box {
+      display: none;
+      font-size: 2.8vw;
+      color: #99003d;
+      font-weight: bold;
+    }
+
+    .scratch-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: nowrap;
+    }
+
+    .gif-box {
+      width: 80px;
+      min-width: 60px;
+      display: none;
+    }
+
+    #scratchContainer {
+      position: relative;
+      width: 80vw;
+      max-width: 320px;
+      aspect-ratio: 1/1;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,0,0,0.25);
+      touch-action: none;
+      flex-shrink: 0;
+    }
+
+    #photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #scratchCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+    }
+
+    @media (max-width: 600px) {
+      .title-box h1 { font-size: 6.5vw; }
+      .message-box { font-size: 5.5vw; }
+      .gif-box { width: 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="title-box">
+      <h1>✨ Last Page... yukk main gosok2 dlu kitaa~ </h1>
+    </div>
+
+    <div class="scratch-wrapper">
+      <!-- GIF kiri -->
+      <div class="gif-box" id="gifLeft">
+        <div class="tenor-gif-embed" data-postid="26501943" data-share-method="host" data-aspect-ratio="0.5" data-width="100%">
+          <a href="https://tenor.com/view/cat-ice-cream-licking-ice-cream-cone-gif-26501943">Cat Ice Cream GIF</a>
+        </div>
+      </div>
+
+      <!-- Scratch Card -->
+      <div id="scratchContainer">
+        <img id="photo" src="image/your-photo.jpg" alt="Surprise Photo">
+        <canvas id="scratchCanvas"></canvas>
+      </div>
+
+      <!-- GIF kanan -->
+      <div class="gif-box" id="gifRight">
+        <div class="tenor-gif-embed" data-postid="26501943" data-share-method="host" data-aspect-ratio="0.5" data-width="100%">
+          <a href="https://tenor.com/view/cat-ice-cream-licking-ice-cream-cone-gif-26501943">Cat Ice Cream GIF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="message-box" id="messageBox">
+      🎉🎉🍦 yeaayyy dapet kupon eskrimmmm 🍦🎉🎉
+    </div>
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Audio -->
+  <audio id="yeayy" src="children-saying-yay-praise-and-worship-jesus-299607.mp3"></audio>
+  <audio id="musik" src="Lagu es krim campina.mp3" loop></audio>
+
+  <!-- Tenor GIF script -->
+  <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const canvas = document.getElementById('scratchCanvas');
+    const container = document.getElementById('scratchContainer');
+    const ctx = canvas.getContext('2d');
+
+    const yeayy = document.getElementById('yeayy');
+    const musik = document.getElementById('musik');
+    const messageBox = document.getElementById('messageBox');
+    const gifLeft = document.getElementById('gifLeft');
+    const gifRight = document.getElementById('gifRight');
+
+    function resizeCanvas() {
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
+      setupCanvas();
+    }
+
+    function setupCanvas() {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = "#d99dbf";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = `${canvas.width * 0.08}px sans-serif`;
+      ctx.fillStyle = "#5a2a4d";
+      ctx.textAlign = "center";
+      ctx.fillText("Gosok manja~", canvas.width / 2, canvas.height / 2);
+    }
+
+    function getPosition(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    let isDrawing = false;
+    let rewardTriggered = false;
+
+    function draw(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const pos = getPosition(e);
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, canvas.width * 0.05, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    function calculateRevealedPercentage() {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let total = imageData.data.length / 4;
+      let cleared = 0;
+      for (let i = 3; i < imageData.data.length; i += 4) {
+        if (imageData.data[i] === 0) cleared++;
+      }
+      return (cleared / total) * 100;
+    }
+
+    function triggerReward() {
+      if (rewardTriggered) return;
+      rewardTriggered = true;
+
+      canvas.style.display = "none";
+
+      const duration = 3000;
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({ particleCount: 6, angle: 60, spread: 70, origin: { x: 0 } });
+        confetti({ particleCount: 6, angle: 120, spread: 70, origin: { x: 1 } });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+
+      messageBox.style.display = 'block';
+      gifLeft.style.display = 'block';
+      gifRight.style.display = 'block';
+      yeayy.play();
+      musik.volume = 0.3;
+      musik.play();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    canvas.addEventListener('mousedown', () => isDrawing = true);
+    canvas.addEventListener('touchstart', () => isDrawing = true);
+
+    canvas.addEventListener('mouseup', () => {
+      isDrawing = false;
+      if (calculateRevealedPercentage() > 50) triggerReward();
+    });
+
+    canvas.addEventListener('touchend', () => {
+      isDrawing = false;
+      if (calculateRevealedPercentage() > 50) triggerReward();
+    });
+
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('touchmove', draw);
+  </script>
+</body>
+</html>
